@@ -1,27 +1,57 @@
-name: Deploy to Github Pages
+# name: Deploy to Github Pages
+
+# on:
+#   push:
+#     branches:
+#     - main
+# permissions:
+#   pages: write
+#   id-token: write
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Upload to github pages
+#         uses: actions/upload-pages-artifact@v3
+
+#         with:
+#           path: .
+
+#       - name: Deploy to Github Pages
+#         uses: actions/deploy-pages@v2
+
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-    - main
+    branches: [main]
+
 permissions:
+  contents: read
   pages: write
   id-token: write
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Upload to github pages
+      - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
-
         with:
-          path: .
+          path: .  # or 'dist' or 'build' folder if using a static site builder
 
-      - name: Deploy to Github Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v2
